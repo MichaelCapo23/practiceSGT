@@ -85,6 +85,7 @@ function renderStudentOnDom(studentObj){
         class: 'btn btn-warning edit',
         text: 'Edit',
         'text-align': 'center',
+        rowNum: studentObj.ID,
         on: {
             click: handleEditClicked
         }
@@ -115,11 +116,12 @@ function CalleditStudentList(studentObj) {
     const name = TR.children[0].childNodes[0].value;
     const course = TR.children[1].childNodes[0].value;
     const grade = TR.children[2].childNodes[0].value;
-    editStudentList(name, course, grade);
+    const id = TR.children[4].childNodes[0].attributes.rowNum.value;
+    editStudentList(name, course, grade, id);
 }
 
 
-function editStudentList(name, course, grade){
+function editStudentList(name, course, grade, id){
     debugger;
     $.ajax({
         dataType: 'json',
@@ -128,7 +130,8 @@ function editStudentList(name, course, grade){
         data: {
             name,
             course,
-            grade
+            grade,
+            id
         }
     })
 }

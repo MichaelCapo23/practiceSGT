@@ -168,21 +168,42 @@ webserver.post('/api/addStudent', (request,response)=>{
 
 
 
-webserver.post("/api/UpdateStudent", (request, response) => {
-    console.log("request.body", request.body);
-    const name = request.body.name;
-    const course = request.body.course;
-    const grade = request.body.grade;
-    console.log(name, course, grade);
-})
+// webserver.post("/api/UpdateStudent", (request, response) => {
+//     console.log("request.body", request.body);
+//     const name = request.body.name;
+//     const course = request.body.course;
+//     const grade = request.body.grade;
+//     const id = request.body.id;
+//     const valuesArray = [name, course, grade, id];
+//     db.connect(() => {
+//         const query = "UPDATE `students`" +
+//                       " SET Name = ?, Course = ?, Grade = ?" +
+//                       " WHERE ID = ?";
+//         const UpdateQuery = mysql.format(query, valuesArray);
+//         console.log(UpdateQuery);
+//         db.query(UpdateQuery, (err, data) => {
+//             if(!err) {
+//                 const output = {
+//                     success: true
+//                 };
+//                 console.log("winning");
+//                 response.send(output)
+//             } else {
+//                 const output = {
+//                     success: false
+//                 };
+//                 console.log("losing");
+//                 response.send(output)
+//             }
+//         })
+//     })
+// })
 
 
 
 
 
 webserver.listen(7000, () => {
-
     console.log("listening on port 7000");
-
 });
 
