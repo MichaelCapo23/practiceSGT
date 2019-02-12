@@ -3,15 +3,23 @@ var studentArray = [];
 $(document).ready(initializeApp);
 
 function initializeApp(){
-    // $('#modal').hide()
     $('.btn-success').click(handleAddClicked);
     $('.btn-default').click(handleCancelClick);
-    //$('.btn-primary').click(loadData)
-    loadData();
+    checkAuth();
 }
 
 function addClickHandlersToElements(){
 
+}
+
+function checkAuth() {
+    if(localStorage.getItem("token")) {
+        loadData();
+    } else {
+        if(window.location.pathname == "/") {
+            location.replace("http://localhost:7000/signIn.html");
+        }
+    }
 }
 
 function handleAddClicked(){
@@ -106,7 +114,6 @@ function renderStudentOnDom(studentObj){
 
     function handleEditClicked(studentObj){
         changeToInputFields(studentObj);
-
     }
 }
 
@@ -132,6 +139,67 @@ function editStudentList(name, course, grade, id){
             course,
             grade,
             id
+        }
+    }).then((reponse) => {
+        if(reponse.success) {
+            loadData();
+        } else {
+            //handle failed query here
+        }
+
+    })
+}
+
+function validation(){
+    const tests = [
+        {
+            element: "input[name=email]",
+            pattern: /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/,
+            message: 'must be a valid email address'
+        },
+
+        {
+            element: "input[name=password]",
+            pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!$%@#£€*?&]{8,}$/,
+            message: 'Must have one at least eight characters, one capital and a number'
+        },
+    ];
+
+    if( tests.length === tests.filter( validateInputAndDisplayError).length){
+        console.log("it worked!");
+        logUserIn();
+    }
+}
+
+function validateInputAndDisplayError( incomingTests ){
+    const element = incomingTests.element, pattern = incomingTests.pattern, errorMessage = incomingTests.message;
+    const value = $( element ).val();
+    const result = pattern.test( value );
+    if( !result ){
+        $( element ).next().text( errorMessage );
+    } else {
+        $( element ).next().text('');
+    }
+    return result;
+}
+
+function logUserIn() {
+    debugger;
+    const Email = $('input[name=email]').val();
+    const Password = $('input[name=password]').val();
+    $.ajax({
+        method: "POST",
+        url: "/api/LogIn",
+        data: {
+            Email,
+            Password
+        }
+    }).then((response) => {
+        if(response.success) {
+            localStorage.setItem("token", response.token);
+            location.replace("http://localhost:7000/");
+        } else {
+            $('.errorMessage').css("display", "block").css("color", "red").text(response.message);
         }
     })
 }
@@ -162,6 +230,7 @@ function changeToInputFields(studentObj) {
 }
 
 function updateStudentList(updatingStudentArray){
+    debugger;
     console.log(updatingStudentArray);
     $('tbody>tr').remove();
     for(var studentIndex = 0; studentIndex < updatingStudentArray.length; studentIndex++){
@@ -200,15 +269,16 @@ function handleDeleteButton(){
 }
 
 function loadData(){
+    debugger;
     var ajaxOptions= {
         dataType: 'json',
         url: '/api/getAllStudents',
         method:'post',
     }
-
     $.ajax(ajaxOptions).then(function(response){
         console.log(response);
-        studentArray = response.data
+        studentArray = response.data;
+        debugger;
         updateStudentList(studentArray)
     });
 }
@@ -250,7 +320,7 @@ function deleteStudentData(student_id){
     }
 
     $.ajax(ajaxDelete).then(function(response){
-        console.log('deleted new student to database')
+        console.log('deleted new student to database');
         console.log(response);
     });
 }
