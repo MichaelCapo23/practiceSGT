@@ -126,7 +126,7 @@ webserver.post('/api/addStudent', (request,response)=>{
 
     db.connect(()=>{
 
-        const addStudentsQuery = "INSERT INTO `Students` SET `Name` = '"+name+"', Grade = '"+grade+"', Course = '"+course+"'";
+        const addStudentsQuery = "INSERT INTO `students` SET `Name` = '"+name+"', Grade = '"+grade+"', Course = '"+course+"'";
 
         console.log("query: ", addStudentsQuery);
 
@@ -171,7 +171,6 @@ webserver.post('/api/addStudent', (request,response)=>{
 
 
 webserver.post("/api/UpdateStudent", (request, response) => {
-    console.log("request.body", request.body);
     const name = request.body.name;
     const course = request.body.course;
     const grade = request.body.grade;
@@ -188,13 +187,11 @@ webserver.post("/api/UpdateStudent", (request, response) => {
                 const output = {
                     success: true
                 };
-                console.log("winning");
                 response.send(output)
             } else {
                 const output = {
                     success: false
                 };
-                console.log("losing");
                 response.send(output)
             }
         })
@@ -248,7 +245,54 @@ webserver.post("/api/LogIn", (request, response) => {
             }
         })
     })
+});
+
+
+webserver.post("/api/SignUp", (request, response) => {
+    const email = request.body.Email;
+    const password = request.body.Password;
+    db.connect(() => {
+        const query = "SELECT ID FROM `accounts`" +
+            " WHERE Email = ? AND Password = ?";
+        const paramsArr = [email, password];
+        const CheckRecordsQuery = mysql.format(query, paramsArr);
+        db.query(CheckRecordsQuery, (err, data) => {
+            if(!err && data.length < 1) {
+                const token = jwt.encode(email + password, hash);
+                let query = "INSERT INTO `accounts`" +
+                    " SET Email = ?, Password = ?, token = ?";
+                let valuesArr = [email, password, token];
+                const InsertQuery = mysql.format(query, valuesArr);
+                console.log(InsertQuery);
+                db.query(InsertQuery, (err, data) => {
+                    if(!err) {
+                        const output = {
+                            success: true,
+                            token: token
+                        };
+                        console.log("made it!");
+                        response.send(output);
+                    } else {
+                        const output = {
+                            success: false,
+                            message: "unable to make new account"
+                        };
+                        console.log("last err");
+                        response.send(output);
+                    }
+                })
+            } else {
+                const output = {
+                    success: false,
+                    message: "Email/Password has already been taken",
+                }
+                console.log("not even close");
+                response.send(output);
+            }
+        })
+    })
 })
+
 
 
 

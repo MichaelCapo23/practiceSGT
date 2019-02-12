@@ -176,7 +176,7 @@ function validateInputAndDisplayError( incomingTests ){
     const value = $( element ).val();
     const result = pattern.test( value );
     if( !result ){
-        $( element ).next().text( errorMessage );
+        $( element ).next().text( errorMessage ).css("color", "red");
     } else {
         $( element ).next().text('');
     }
@@ -207,6 +207,7 @@ function logUserIn() {
 function changeToInputFields(studentObj) {
     debugger;
     const TR = studentObj.target.parentElement.parentElement;
+    debugger;
     TR.children[0].remove();
     TR.children[1].remove();
     TR.children[0].remove();
@@ -324,6 +325,83 @@ function deleteStudentData(student_id){
         console.log(response);
     });
 }
+
+function validationSignUp(){
+    const tests = [
+        {
+            element: "input[name=emailSignUp]",
+            pattern: /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/,
+            message: 'must be a valid email address'
+        },
+
+        {
+            element: "input[name=passwordSignUp]",
+            pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!$%@#£€*?&]{8,}$/,
+            message: 'Must have one at least eight characters, one capital and a number'
+        },
+        {
+            element: "input[name=passwordConfirm]",
+            pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!$%@#£€*?&]{8,}$/,
+            message: 'Must have one at least eight characters, one capital, a number and match the password above'
+        },
+    ];
+
+    if( tests.length === tests.filter( validateInputAndDisplayError).length){
+        if(checkPasswords()) {
+            console.log("it worked!");
+            SignUserIn();
+        } else {
+            debugger;
+            const message = "Both passwords must match!";
+            $("input[name=passwordConfirm]").next().text( message ).css("color", "red");
+        }
+
+    }
+}
+
+function validateInputAndDisplayError( incomingTests ){
+    const element = incomingTests.element, pattern = incomingTests.pattern, errorMessage = incomingTests.message;
+    const value = $( element ).val();
+    const result = pattern.test( value );
+    if( !result ){
+        $( element ).next().text( errorMessage ).css("color", "red");
+    } else {
+        $( element ).next().text('');
+    }
+    return result;
+}
+
+function SignUserIn() {
+    debugger;
+    const Email = $('input[name=emailSignUp]').val();
+    const Password = $('input[name=passwordConfirm]').val();
+    $.ajax({
+        method: "POST",
+        url: "/api/SignUp",
+        data: {
+            Email,
+            Password
+        }
+    }).then((response) => {
+        debugger;
+        if(response.success) {
+            localStorage.setItem("token", response.token);
+            location.replace("http://localhost:7000/");
+        } else {
+            $('.errorMessageSignUp').css("display", "block").css("color", "red").text(response.message);
+        }
+    })
+}
+
+function checkPasswords() {
+    const password1 = $('input[name=passwordConfirm]').val();
+    const password2 = $('input[name=passwordSignUp]').val();
+    if(password1 === password2) {
+        return true;
+    } else {
+        return false;
+    }
+};
 
 // function openModal(){
 
