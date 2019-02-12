@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+    <!--<link rel="stylesheet" href="../style.css">-->
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <script src="script.js"></script>
+
+    <meta name="viewport" content="initial-scale=1, user-scalable=no">
+
+</head>
+
+<body>
+
+<div class="col-xs-12 col-sm-10 col-sm-offset-1">
+
+    <div class="col-xs-12 page-header media-heading">
+
+        <!-- only show this element when the isnt on mobile -->
+
+        <h1 class="hidden-xs col-xs-12">Student Grade Table
+
+            <small class = 'col-xs-3 col-xs-offset-9'>Grade Average : <span class="avgGrade"></span></small>
+
+        </h1>
+
+        <!-- only show this element when the user gets to a mobile version -->
+
+        <h3 class="hidden-lg hidden-md hidden-sm">Student Grade Table
+
+            <small class = 'col-xs-9 col-xs-offset-8'>Grade Average : <span class="avgGrade"></span></small>
+
+        </h3>
+
+    </div>
+
+    <!-- <div>
+
+        <div>
+
+            <div class="modal-header"></div>
+
+            <form class="modal-body" action="">
+
+                <div class="form-group">
+
+                    <label for=""></label>
+
+                    <input type="text">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for=""></label>
+
+                    <input type="text">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for=""></label>
+
+                    <input type="text">
+
+                </div>
+
+            </form>
+
+            <div class="modal-footer">
+
+                <button class="button-secondary">Cancel</button>
+
+                <button class="button-primary">Confirm Edit</button>
+
+            </div>
+
+        </div>
+
+    </div> -->
+
+    <div class="student-add-form form-group col-sm-4 col-sm-push-8">
+
+        <h4>Add Student</h4>
+
+        <div class="input-group form-group">
+
+            <span class="input-group-addon">
+
+                <span class="glyphicon glyphicon-user"></span>
+
+            </span>
+
+            <input type="text" class="form-control form-rounded input" name="studentName" id="studentName" placeholder="Student Name">
+
+        </div>
+
+        <div class="input-group form-group">
+
+            <span class="input-group-addon">
+
+                <span class="glyphicon glyphicon-list-alt"></span>
+
+            </span>
+
+            <input type="text" class="form-control form-rounded input" name="course" id="course"
+
+                   placeholder="Student Course">
+
+        </div>
+
+        <div class="input-group form-group">
+
+            <span class="input-group-addon">
+
+                <span class="glyphicon glyphicon-education"></span>
+
+            </span>
+
+            <input type="text" class="form-control form-rounded input" name="studentGrade" id="studentGrade"
+
+                   placeholder="Student Grade">
+
+        </div>
+
+        <button type="button" class="btn btn-success" onclick="">Add</button>
+
+        <button type="button" class="btn btn-default" onclick="">Cancel</button>
+
+        <button type="button" class="btn btn-primary" onclick="">Get Data</button>
+
+    </div>
+
+    <div class="student-list-container col-xs-12 col-sm-7 col-sm-pull-4 page-header media-heading">
+
+        <table class="student-list">
+
+            <thead>
+
+            <tr class = 'tableHeader'>
+
+                <th class= 'col-xs-2'>Student Name</th>
+
+                <th class= 'col-xs-2'>Student Course</th>
+
+                <th class= 'col-xs-2'>Student Grade</th>
+
+                <th class= 'col-xs-1'>Operations</th>
+
+            </tr>
+
+            </thead>
+
+            <tbody>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <!-- <div id="modal">
+
+        <p>Are you sure you want to delete this row?</p>
+
+        <button onclick=handleDeleteClicked()>Yes</button>
+
+        <button>No</button>
+
+    </div> -->
+
+</div>
+
+</body>
+
+</html>
+
